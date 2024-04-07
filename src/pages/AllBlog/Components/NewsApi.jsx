@@ -17,13 +17,6 @@ const NewsApi = ({ loading, newsData, error }) => {
 
   return (
     <div className="flex flex-col gap-8 w-full">
-      <Heading
-        size="3xl"
-        as="h1"
-        className="sm:max-w-md md:max-w-lg text-left"
-      >
-        News Api Data
-      </Heading>
       <div className="flex flex-row md:flex-col justify-start items-start w-full gap-6 md:gap-5">
         <div className="flex flex-col items-center justify-start w-full gap-[50px]">
           <div className="justify-center w-full gap-5 grid-cols-4 md:grid-cols-2 sm:grid-cols-1 grid">
