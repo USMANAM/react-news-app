@@ -1,31 +1,24 @@
 import React, { useState } from "react";
-import {
-  Img,
-  Heading,
-  Button,
-  Input,
-} from "../../components";
+import { Img, Heading, Button, Input } from "../../components";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import AllBlogFilter from "modals/AllBlogFilter";
 import useNewsData from "hooks/useNewsData";
 import NewsApi from "./Components/NewsApi";
+import { SearchSVG } from "assets/images";
 
 export default function AllBlogPage() {
   const [openModal, setOpenModal] = useState(false);
+  const [newSearchVal, setNewSearchVal] = useState("news");
   const [filterData, setFilterData] = useState({
     category: "",
     source: "",
-    searchTerm: "news",
+    searchTerm: newSearchVal,
     fromDate: "",
     toDate: "",
   });
 
-  const {
-    newsData,
-    loading,
-    error,
-  } = useNewsData(
+  const { newsData, loading, error } = useNewsData(
     filterData.category,
     filterData.searchTerm,
     filterData.source,
@@ -35,6 +28,14 @@ export default function AllBlogPage() {
 
   const openFilterModal = () => {
     setOpenModal(true);
+  };
+
+  const handleSubmitSearch = (e) => {
+    e.preventDefault();
+    setFilterData((prevState) => ({
+      ...prevState,
+      searchTerm: newSearchVal,
+    }));
   };
 
   return (
@@ -51,35 +52,38 @@ export default function AllBlogPage() {
               Read the latest news from around the world
             </Heading>
             <div className="flex flex-row w-full items-center justify-center">
-              <Input
-                color="gray_50"
-                size="md"
-                name="bxfilter"
-                placeholder="Search"
-                suffix={
-                  <Button
-                    onClick={() => openFilterModal()}
-                    className="rounded-lg"
-                    color="gray_100"
-                    leftIcon={
-                      <Img
-                        src="images/img_bxfilter.svg"
-                        alt="bx:filter"
-                        className="cursor-pointer mr-1"
-                      />
-                    }
-                  >
-                    Filter
-                  </Button>
+              <form
+                onSubmit={(e) => handleSubmitSearch(e)}
+                action=""
+                className="w-1/2"
+              >
+                <Input
+                  type=""
+                  color="gray_50"
+                  size="md"
+                  name="bxfilter"
+                  placeholder="Search"
+                  suffix={<SearchSVG onClick={(e) => handleSubmitSearch(e)} />}
+                  onChange={(e) =>
+                    setNewSearchVal(e)
+                  }
+                  className="gap-[11px] font-semibold rounded-[15px]"
+                />
+              </form>
+              <Button
+                onClick={() => openFilterModal()}
+                className="rounded-lg"
+                color="white_A700"
+                leftIcon={
+                  <Img
+                    src="images/img_bxfilter.svg"
+                    alt="bx:filter"
+                    className="cursor-pointer mr-1"
+                  />
                 }
-                onChange={(e) =>
-                  setFilterData((prevState) => ({
-                    ...prevState,
-                    searchTerm: e,
-                  }))
-                }
-                className="gap-[11px] font-semibold rounded-[15px]"
-              />
+              >
+                Filter
+              </Button>
             </div>
             <NewsApi loading={loading} newsData={newsData} error={error} />
           </div>
